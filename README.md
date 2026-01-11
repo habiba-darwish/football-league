@@ -1,98 +1,197 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Football League Management System
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A backend API built with **NestJS**, **TypeORM**, and **PostgreSQL** to manage football leagues.  
+It supports CRUD operations for **Clubs, Teams, Players, Stadiums, and Matches**, with conflict‑checking logic to prevent overlapping matches.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## Features
+- **Authentication** with JWT (admin user auto‑created at startup).
+- **CRUD APIs** for:
+  - Clubs
+  - Teams
+  - Players
+  - Stadiums
+  - Matches
+- **Conflict Checking**:
+  - Prevents scheduling matches in the same stadium within 120 minutes.
+- **Logging Interceptor**:
+  - Logs requests, responses, and execution time.
+- **Environment Variables**:
+  - Secure configuration via `.env` file.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+---
 
-## Project setup
-
-```bash
-$ npm install
+## Project Structure
+```
+src/
+├── app.module.ts
+├── app.controller.ts
+├── app.service.ts
+├── config/
+│   ├── database.config.ts
+│   └── jwt.config.ts
+├── controllers/
+│   ├── auth.controller.ts
+│   ├── clubs.controller.ts
+│   ├── matches.controller.ts
+│   ├── players.controller.ts
+│   ├── stadiums.controller.ts
+│   └── teams.controller.ts
+├── services/
+│   ├── auth.service.ts
+│   ├── clubs.service.ts
+│   ├── matches.service.ts
+│   ├── players.service.ts
+│   ├── stadiums.service.ts
+│   └── teams.service.ts
+├── models/
+│   ├── user.model.ts
+│   ├── club.model.ts
+│   ├── team.model.ts
+│   ├── player.model.ts
+│   ├── stadium.model.ts
+│   └── match.model.ts
+└── utils/
+    └── match-conflict.util.ts
 ```
 
-## Compile and run the project
+---
 
+##  Setup
+
+### 1. Clone the repository
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+git clone https://github.com/your-username/football-league.git
+cd football-league
 ```
 
-## Run tests
-
+### 2. Install dependencies
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm install
 ```
 
-## Deployment
+### 3. Configure environment variables
+Create a `.env` file in the project root:
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+```env
+# Database
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=password
+DB_NAME=football_league
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+# JWT
+JWT_SECRET=superSecretKey
+JWT_EXPIRES_IN=1h
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Admin user
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=admin123
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### 4. Run the application
+```bash
+npm run start:dev
+```
 
-## Resources
+---
 
-Check out a few resources that may come in handy when working with NestJS:
+## Testing with Postman
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### Sequence of Requests
+1. **Login**
+   ```
+   POST /auth/login
+   {
+     "userName": "admin",
+     "password": "admin123"
+   }
+   ```
+   → Save `access_token` for Authorization.
 
-## Support
+2. **Create Club**
+   ```
+   POST /clubs
+   { "name": "FC Cairo" }
+   ```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+3. **Create Teams**
+   ```
+   POST /teams
+   { "name": "Cairo Eagles", "coachName": "Ahmed Hassan", "clubId": 1 }
 
-## Stay in touch
+   POST /teams
+   { "name": "Cairo Lions", "coachName": "Omar Ali", "clubId": 1 }
+   ```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+4. **Create Player**
+   ```
+   POST /players
+   { "name": "Mohamed Salah", "position": "Forward", "shirtNumber": 10, "teamId": 1 }
+   ```
 
-## License
+5. **Create Stadium**
+   ```
+   POST /stadiums
+   { "name": "Cairo International Stadium", "capacity": 75000 }
+   ```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+6. **Create Match**
+   ```
+   POST /matches
+   {
+     "homeTeam": 1,
+     "awayTeam": 2,
+     "stadium": 1,
+     "matchDate": "2025-12-10T18:00:00Z"
+   }
+   ```
+
+7. **Read / Update / Delete**
+   - `GET /clubs`, `GET /teams`, `GET /players`, `GET /stadiums`, `GET /matches`
+   - `PUT /clubs/:id`, `PUT /teams/:id`, etc.
+   - `DELETE /clubs/:id`, `DELETE /teams/:id`, etc.
+
+---
+
+API Documentation
+We’ve prepared a Postman collection with all endpoints (Clubs, Teams, Players, Stadiums, Matches, Auth).  
+You can explore and test them here:
+
+[![Football League API Postman Docs](https://img.shields.io/badge/Postman-Documentation-orange?logo=postman)](https://documenter.getpostman.com/view/47449582/2sB3dPTWCt)
+
+
+---
+
+
+## Conflict Rules
+- Matches in the same stadium must be **at least 120 minutes apart**.
+- Teams cannot be deleted if they are referenced in matches .
+
+
+---
+
+##  Logging
+Custom interceptor logs:
+- Request method, URL, body
+- Response status, data
+- Execution time
+
+---
+
+##  Tech Stack
+- **NestJS** (framework)
+- **TypeORM** (ORM)
+- **PostgreSQL** (database)
+- **JWT** (authentication)
+- **bcrypt** (password hashing)
+
+---
+
+##  Summary
+This API provides a robust backend for managing football leagues, ensuring fair scheduling, secure authentication, and clean logging. It’s ready to be extended with features like team conflict checks, soft deletes, or role‑based access control.
+
+---
+
